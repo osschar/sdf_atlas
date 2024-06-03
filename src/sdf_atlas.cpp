@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -47,7 +47,7 @@ void SdfAtlas::allocate_codepoint( uint32_t codepoint ) {
     if ( glyph_idx == 0 ) return;
     const Glyph& g = font->glyphs[ glyph_idx ];
     if ( g.command_count <= 2 ) return;
-    
+
     float fheight = font->ascent - font->descent;
     float scale = row_height / fheight;
     float rect_width = ( g.max.x - g.min.x ) * scale + sdf_size * 2.0f;
@@ -55,7 +55,7 @@ void SdfAtlas::allocate_codepoint( uint32_t codepoint ) {
 
     if ( ( posx + rect_width ) > tex_width ) {
         posx = 0.0f;
-        
+
         posy = ceil( posy + row_and_border );
         max_height = ceil( posy + row_and_border );
     }
@@ -90,7 +90,7 @@ void SdfAtlas::draw_glyphs( GlyphPainter& gp ) const {
     float fheight = font->ascent - font->descent;
     float scale = row_height / fheight;
     float baseline = -font->descent * scale;
-    
+
     for ( size_t iglyph = 0; iglyph < glyph_rects.size(); ++iglyph ) {
         const GlyphRect& gr = glyph_rects[ iglyph ];
         float left = font->glyphs[ gr.glyph_idx ].left_side_bearing * scale;
@@ -101,13 +101,13 @@ void SdfAtlas::draw_glyphs( GlyphPainter& gp ) const {
 
 std::string SdfAtlas::json( float tex_height, bool flip_texcoord_y ) const {
     float fheight = font->ascent - font->descent;
-    float scaley = row_height / tex_height / fheight; 
-    float scalex = row_height / tex_width / fheight;   
+    float scaley = row_height / tex_height / fheight;
+    float scalex = row_height / tex_width / fheight;
 
     const Glyph& gspace = font->glyphs[ font->glyph_idx( ' ' ) ];
     const Glyph& gx     = font->glyphs[ font->glyph_idx( 'x' ) ];
     const Glyph& gxcap  = font->glyphs[ font->glyph_idx( 'X' ) ];
-    
+
     std::unordered_set<uint32_t> codepoints;
     for ( size_t igr = 0; igr < glyph_rects.size(); ++igr ) {
         codepoints.insert( glyph_rects[igr].codepoint );
@@ -115,18 +115,18 @@ std::string SdfAtlas::json( float tex_height, bool flip_texcoord_y ) const {
 
     std::stringstream ss;
     ss << "{" << std::endl;
-    ss << "    ix: " << sdf_size / tex_width << ", " << std::endl;
-    ss << "    iy: " << sdf_size / tex_height << ", " << std::endl;
-    ss << "    row_height: " << ( row_height + 2.0f * sdf_size ) / tex_height << ", " << std::endl;
-    ss << "    aspect: " <<  tex_width / tex_height << ", " << std::endl;
-    ss << "    ascent: " << font->ascent * scaley << ", " << std::endl;
-    ss << "    descent: " << fabsf( font->descent * scaley ) << ", " << std::endl;
-    ss << "    line_gap: " << font->line_gap * scaley << ", " << std::endl;
-    ss << "    cap_height: " << gxcap.max.y * scaley  << ", " << std::endl;
-    ss << "    x_height: " << gx.max.y * scaley  << ", " << std::endl;
-    ss << "    space_advance: " << gspace.advance_width * scalex << ", " << std::endl << std::endl;
-    
-    ss << "    chars: { " << std::endl;
+    ss << "  \"ix\": " << sdf_size / tex_width << ", " << std::endl;
+    ss << "  \"iy\": " << sdf_size / tex_height << ", " << std::endl;
+    ss << "  \"row_height\": " << ( row_height + 2.0f * sdf_size ) / tex_height << ", " << std::endl;
+    ss << "  \"aspect\": " <<  tex_width / tex_height << ", " << std::endl;
+    ss << "  \"ascent\": " << font->ascent * scaley << ", " << std::endl;
+    ss << "  \"descent\": " << fabsf( font->descent * scaley ) << ", " << std::endl;
+    ss << "  \"line_gap\": " << font->line_gap * scaley << ", " << std::endl;
+    ss << "  \"cap_height\": " << gxcap.max.y * scaley  << ", " << std::endl;
+    ss << "  \"x_height\": " << gx.max.y * scaley  << ", " << std::endl;
+    ss << "  \"space_advance\": " << gspace.advance_width * scalex << ", " << std::endl << std::endl;
+
+    ss << "  \"chars\": { " << std::endl;
 
     for ( size_t igr = 0; igr < glyph_rects.size(); ++igr ) {
         const GlyphRect& gr = glyph_rects[ igr ];
@@ -140,29 +140,30 @@ std::string SdfAtlas::json( float tex_height, bool flip_texcoord_y ) const {
         }
 
         char ucp[32];
-        snprintf( ucp, 32, "    \"\\u%04x\": {", gr.codepoint );
+        snprintf( ucp, 32, "  \"\\u%04x\": {", gr.codepoint );
         ss << ucp << std::endl;
-        ss << "        codepoint: " << gr.codepoint << "," << std::endl;
-        ss << "        rect: [";
+        ss << "    \"codepoint\": " << gr.codepoint << "," << std::endl;
+        ss << "    \"rect\": [";
         ss << gr.x0 / tex_width << ", " << tcy0 << ", ";
         ss << gr.x1 / tex_width << ", " << tcy1 << "]," << std::endl;
-        ss << "        bearing_x: " << g.left_side_bearing * scalex << "," << std::endl;
-        ss << "        advance_x: " << g.advance_width * scalex << "," << std::endl;
-        ss << "        flags: " << (int)g.char_type << std::endl;
-        ss << "    }";
+        ss << "    \"bearing_x\": " << g.left_side_bearing * scalex << "," << std::endl;
+        ss << "    \"advance_x\": " << g.advance_width * scalex << "," << std::endl;
+        ss << "    \"flags\": " << (int)g.char_type << std::endl;
+        ss << "  }";
         if ( igr != glyph_rects.size() - 1 ) ss << ",";
         ss << std::endl;
     }
 
-    ss << "    }, // end chars" << std::endl;
+    ss << "  }," << std::endl;
 
-    ss << "    kern: {" << std::endl;
+    ss << "  \"kern\": {" << std::endl;
 
+    bool first_p = true;
     for ( auto kv : font->kern_map ) {
         uint32_t kern_pair = kv.first;
         float kern_value = kv.second * scalex;
 
-        int kern_first_idx = ( kern_pair >> 16 ) & 0xffff;        
+        int kern_first_idx = ( kern_pair >> 16 ) & 0xffff;
         int kern_second_idx = kern_pair & 0xffff;
 
         auto it1 = font->cp_map.find( kern_first_idx );
@@ -180,17 +181,19 @@ std::string SdfAtlas::json( float tex_height, bool flip_texcoord_y ) const {
                 bool first_found = codepoints.find( kern_first ) != codepoints.end();
                 bool second_found = codepoints.find( kern_second ) != codepoints.end();
                 if ( first_found && second_found ) {
+                    if (first_p) first_p = false;
+                    else         ss << "," << std::endl;
                     char uckern[ 64 ];
-                    snprintf( uckern, 64, "        \"\\u%04x\\u%04x\" : ", kern_first, kern_second );
-                    ss << uckern << kern_value << "," << std::endl;
+                    snprintf( uckern, 64, "    \"\\u%04x\\u%04x\": ", kern_first, kern_second );
+                    ss << uckern << kern_value;
                 }
             }
         }
     }
 
-    ss << "    } // end kern" << std::endl;
+    ss << "  }" << std::endl;
 
-    ss << "}; // end font" << std::endl;    
-    
+    ss << "}" << std::endl;
+
     return ss.str();
 }

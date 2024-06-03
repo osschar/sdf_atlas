@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -79,7 +79,7 @@ static bool fill_cmap( Font& font, const uint8_t *ttf ) {
 
     uint32_t num_tables = ttf_u16( cmap + 2 );
     const uint8_t *imap = nullptr;
-    
+
     for ( size_t itbl = 0; itbl < num_tables; ++itbl ) {
         const uint8_t *enc_table = cmap + 4 + 8 * itbl;
         uint16_t platform = ttf_u16( enc_table );
@@ -108,14 +108,14 @@ static bool fill_cmap( Font& font, const uint8_t *ttf ) {
             font.glyph_map.insert( { i, idx } );
         }
         return true;
-        
+
     } else if ( format == 4 ) {
         uint32_t  seg_count = ttf_u16( imap + 6 ) >> 1;
         const uint8_t  *end_code = imap + 7 * 2;
         const uint8_t  *start_code = end_code + 2 + seg_count * 2;
         const uint8_t  *offset = imap + 8 * 2 + seg_count * 2 * 3;
         const uint8_t  *delta = imap + 8 * 2 + seg_count * 2 * 2;
-        
+
         for ( uint32_t iseg = 0; iseg < seg_count; iseg++ ) {
             uint32_t seg_start = ttf_u16( start_code + iseg * 2 );
             uint32_t seg_end = ttf_u16( end_code + iseg * 2 );
@@ -136,7 +136,7 @@ static bool fill_cmap( Font& font, const uint8_t *ttf ) {
             }
         }
         return true;
-        
+
     } else if ( format == 6 ) {
         uint32_t       first    = ttf_u16( imap + 6 );
         uint32_t       count    = ttf_u16( imap + 8 );
@@ -147,7 +147,7 @@ static bool fill_cmap( Font& font, const uint8_t *ttf ) {
             font.glyph_map.insert( { i + first, idx } );
         }
         return true;
-        
+
     } else if ( format == 10 ) {
         uint32_t        first_char = ttf_u32( imap + 12 );
         uint32_t        num_chars  = ttf_u32( imap + 16 );
@@ -158,7 +158,7 @@ static bool fill_cmap( Font& font, const uint8_t *ttf ) {
             font.glyph_map.insert( { i + first_char, idx } );
         }
         return true;
-        
+
     } else if ( format == 12 ) {
         uint32_t       ngroups = ttf_u32( imap + 12 );
         const uint8_t *sm_group = imap + 16;
@@ -176,7 +176,7 @@ static bool fill_cmap( Font& font, const uint8_t *ttf ) {
             sm_group += 12;
         }
         return true;
-        
+
     } else if ( format == 13 ) {
         uint32_t       ngroups = ttf_u32( imap + 12 );
         const uint8_t *sm_group = imap + 16;
@@ -185,7 +185,7 @@ static bool fill_cmap( Font& font, const uint8_t *ttf ) {
             uint32_t start_code = ttf_u32( sm_group );
             uint32_t end_code = ttf_u32( sm_group + 4 );
             uint32_t glyph_idx = ttf_u32( sm_group + 8 );
-            
+
             for ( uint32_t icode = start_code; icode <= end_code; ++icode ) {
                 font.glyph_map.insert( { icode, glyph_idx } );
             }
@@ -194,7 +194,7 @@ static bool fill_cmap( Font& font, const uint8_t *ttf ) {
         }
         return true;
     }
-    
+
     return false;
 }
 
@@ -239,7 +239,7 @@ static void glyph_shape_simple( Glyph& glyph, std::vector<GlyphCommand>& command
     int            fcount = num_pts;
     size_t         xbytes = 0;
 
-    // Calculating offsets of point coordinate tables 
+    // Calculating offsets of point coordinate tables
     while ( fcount > 0 ) {
         uint8_t flag    = fpos[0];
         uint8_t frepeat = fpos[1];
@@ -255,19 +255,19 @@ static void glyph_shape_simple( Glyph& glyph, std::vector<GlyphCommand>& command
             xbytes += xsize;
         }
     }
-    
+
     const uint8_t *xcoord = fpos;
     const uint8_t *ycoord = xcoord + xbytes;
 
     // Flag bits:
     // 0x01 - on-curve, ~0x01 - off-curve
-    // Two consecutive off-curve points assume on-curve point between them    
+    // Two consecutive off-curve points assume on-curve point between them
     //
     // 0x02 - x-coord is 8-bit unsigned integer
     //       0x10 - positive, ~0x10 - negative
     // ~0x02 - x-coord is 16-bit signed integer
     // ~0x02 & 0x10 - x-coord equals x-coord of the previous point
-    // 
+    //
     // 0x04 - y-coord is 8-bit unsigned integer
     //       0x20 - positive, ~0x20 - negative
     // ~0x04 - y-coord is 16-bit signed integer
@@ -282,7 +282,7 @@ static void glyph_shape_simple( Glyph& glyph, std::vector<GlyphCommand>& command
 
     bool prev_on_curve = true;  // previous point was on-curve
     bool on_curve = true;       // current point is on-curve
-    
+
     size_t  iflag = 0; // next flag index
     uint8_t flag  = 0; // current flag value
 
@@ -355,7 +355,7 @@ static void glyph_shape_simple( Glyph& glyph, std::vector<GlyphCommand>& command
             command.p1 = F2{ 0.0f };
 
             commands.push_back( command );
-            
+
             icontour = ttf_u16( end_pts );
             end_pts += 2;
             new_contour = false;
@@ -396,7 +396,7 @@ static void glyph_shape_simple( Glyph& glyph, std::vector<GlyphCommand>& command
                     // Contour starts and ends off-curve,
                     // calculating contour starting point, setting first MoveTo P0,
                     // and closing contour with BezTo
-                    
+
                     F2 cpos = scale * cur_pos;
                     F2 next_cp = commands[ gc_contour_start_idx + 1 ].p0; // First BezTo off-curve CP
                     F2 pos = 0.5f * ( cpos + next_cp );                   // Contour start point
@@ -410,7 +410,7 @@ static void glyph_shape_simple( Glyph& glyph, std::vector<GlyphCommand>& command
             } else {
                 if ( !on_curve ) {
                     // Contour ends off-curve, closing contour with BezTo to contour starting point
-                    
+
                     F2 start_pos = commands[ gc_contour_start_idx ].p0;
 
                     command.p0 = scale * cur_pos;
@@ -449,7 +449,7 @@ static void glyph_commands_composite( Font& font, int glyph_idx ) {
             const GlyphCommand& gcommand = font.glyph_commands[ icommand ];
             GlyphCommand new_command;
             new_command.type = gcommand.type;
-                
+
             switch ( gcommand.type ) {
             case GlyphCommand::MoveTo:
             case GlyphCommand::LineTo:
@@ -459,7 +459,7 @@ static void glyph_commands_composite( Font& font, int glyph_idx ) {
                 new_command.p0 = tr * gcommand.p0;
                 new_command.p1 = tr * gcommand.p1;
                 break;
-            case GlyphCommand::ClosePath:                
+            case GlyphCommand::ClosePath:
                 break;
             }
             font.glyph_commands.push_back( new_command );
@@ -476,8 +476,8 @@ static void glyph_shape( Font& font, int glyph_idx, bool is_loc32, const uint8_t
     Glyph &glyph = font.glyphs[ glyph_idx ];
 
     int glyph_offset = glyph_loc_offset( glyph_idx, is_loc32, loca );
-    if ( glyph_offset < 0 ) return;    
-    
+    if ( glyph_offset < 0 ) return;
+
     const uint8_t *glyph_loc = glyf + glyph_offset;
     int num_contours = ttf_i16( glyph_loc );
 
@@ -485,7 +485,7 @@ static void glyph_shape( Font& font, int glyph_idx, bool is_loc32, const uint8_t
     float miny = ttf_i16( glyph_loc + 4 );
     float maxx = ttf_i16( glyph_loc + 6 );
     float maxy = ttf_i16( glyph_loc + 8 );
-    
+
     glyph.min = scale * F2{ minx, miny };
     glyph.max = scale * F2{ maxx, maxy };
 
@@ -505,7 +505,7 @@ static void glyph_shape( Font& font, int glyph_idx, bool is_loc32, const uint8_t
             uint16_t flags = ttf_u16( pos );
             uint32_t comp_glyph_idx = ttf_u16( pos + 2 );
             pos += 4;
-            
+
             Mat2d gtr { 1.0f };
 
             // Component position
@@ -540,7 +540,7 @@ static void glyph_shape( Font& font, int glyph_idx, bool is_loc32, const uint8_t
             GlyphComponent gc;
             gc.glyph_idx = comp_glyph_idx;
             gc.transform = gtr;
-            font.glyph_components.push_back( gc );            
+            font.glyph_components.push_back( gc );
 
             // More components?
             next_comp = flags & ( 1 << 5 );
@@ -564,7 +564,7 @@ static bool fill_kern( Font& font, const uint8_t *ttf, float scale ) {
     for ( size_t itbl = 0; itbl < num_tables; ++itbl ) {
         uint16_t length = ttf_u16( pos + 2 );
         uint16_t coverage = ttf_u16( pos + 4 );
-        
+
         if ( coverage == 1 ) {
             table = pos;
             break;
@@ -576,7 +576,7 @@ static bool fill_kern( Font& font, const uint8_t *ttf, float scale ) {
 
     uint32_t num_pairs = ttf_u16( table + 6 );
     pos = table + 14;
-    
+
     for ( uint32_t ipair = 0; ipair < num_pairs; ++ipair ) {
         uint32_t left  = ttf_u16( pos );
         uint32_t right = ttf_u16( pos + 2 );
@@ -592,7 +592,7 @@ static bool fill_kern( Font& font, const uint8_t *ttf, float scale ) {
 bool Font::load_ttf_file( const char *filename ) {
     FILE *f = fopen( filename, "rb" );
     if ( !f ) return false;
-    
+
     fseek( f, 0, SEEK_END );
     size_t fsize = ftell( f );
     fseek( f, 0, SEEK_SET );
@@ -642,7 +642,7 @@ bool Font::load_ttf_mem( const uint8_t *ttf ) {
     em_line_gap = ttf_i16( hhea + 8 );
 
     uint32_t num_hmtx = ttf_u16( hhea + 34 );
-    
+
     float scale = 1.0f / em_ascent;
     ascent   = 1.0;
     descent  = em_descent * scale;
@@ -674,7 +674,7 @@ bool Font::load_ttf_mem( const uint8_t *ttf ) {
     for ( size_t iglyph = 0; iglyph < num_glyphs; ++iglyph ) {
         glyph_shape( *this, iglyph, is_loc32, loca, glyf, scale );
         glyph_min = min( glyph_min, glyphs[iglyph].min );
-        glyph_max = max( glyph_max, glyphs[iglyph].max );        
+        glyph_max = max( glyph_max, glyphs[iglyph].max );
     }
 
     // Calculating composite glyph commands
@@ -687,6 +687,12 @@ bool Font::load_ttf_mem( const uint8_t *ttf ) {
         uint32_t codepoint = cgpair.first;
         int iglyph = cgpair.second;
         if ( iglyph < 0 ) continue;
+        if ( iglyph >= (int)glyphs.size()) {
+            fprintf(stderr, "Gylph out of range: %d, glyphs.size\%d\n"
+                    "  This seems to happen with some old ttf files of semi-unknown origin.\n",
+                    iglyph, (int)glyphs.size());
+            exit(1);
+        }
         Glyph& g = glyphs[ iglyph ];
         if ( iswlower( codepoint ) ) g.char_type = Glyph::Lower;
         if ( iswupper( codepoint ) | iswdigit( codepoint ) ) g.char_type = Glyph::Upper;
@@ -702,13 +708,13 @@ bool Font::load_ttf_mem( const uint8_t *ttf ) {
             cp_map.insert( { cgpair.second, std::move( v ) } );
         } else {
             it->second.push_back( cgpair.second );
-        }        
-    }    
+        }
+    }
 
     // Some fonts store kerning information in "kern" table, reading it
     fill_kern( *this, ttf, scale );
 
     // TODO Other fonts store kerning information in "gpos" table
-        
-    return true;    
+
+    return true;
 }
