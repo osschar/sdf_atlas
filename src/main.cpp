@@ -151,7 +151,7 @@ void read_unicode_ranges( ArgsParser *ap ) {
         char *new_pos = pos;
         range_start = strtol( pos, &new_pos, 0 );
         if ( errno != 0 || range_start < 0 ) {
-            std::cerr << "Error reading unicode ranges" << std::endl;
+            std::cerr << "Error reading unicode ranges - begin range" << std::endl;
             exit( 1 );
         }
         range_end = range_start;
@@ -163,7 +163,7 @@ void read_unicode_ranges( ArgsParser *ap ) {
             errno = 0;
             range_end = strtol( pos, &new_pos, 0 );
             if ( errno != 0 || range_end < 0 ) {
-                std::cerr << "Error reading unicode ranges" << std::endl;
+                std::cerr << "Error reading unicode ranges - end range" << std::endl;
                 exit( 1 );
             }
             pos = new_pos;
@@ -177,7 +177,7 @@ void read_unicode_ranges( ArgsParser *ap ) {
             unicode_ranges.push_back( UnicodeRange { (uint32_t) range_start, (uint32_t) range_end } );
             return;
         } else {
-            std::cerr << "Error reading unicode ranges" << std::endl;
+            std::cerr << "Error reading unicode ranges - after-range-separator" << std::endl;
             exit( 1 );
         }
     }
