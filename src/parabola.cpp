@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -68,7 +68,7 @@ Parabola Parabola::from_line( const Float2& p0, const Float2& p1 ) {
     F2    px = normalize( rc - p0 );
     F2    py = perp_left( px );
     F2    pvertex = p0 - px * scale * px0 - py * scale * py0;
-    
+
     Parabola res;
 
     res.mat = Mat2d{ px, py, pvertex };
@@ -100,7 +100,7 @@ Parabola Parabola::from_qbez( const Float2& p0, const Float2& p1, const Float2& 
 
     float p02x = dot( p2 - p0, xaxis );
     float scale = p02x / ( x2 - x0 );
-    
+
     Float2 vertex = p0 - F2( y0 * scale ) * yaxis - F2( x0 * scale ) * xaxis;
 
     res.scale  = scale;

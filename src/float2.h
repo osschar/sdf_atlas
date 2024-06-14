@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,8 +35,8 @@ struct Float2 {
     explicit Float2( float* a ) :
         x(a[0]), y(a[1]) {}
 
-    Float2( float x, float y ) :
-        x(x), y(y) {}
+    Float2( float ix, float iy ) :
+        x(ix), y(iy) {}
 
     Float2( const Float2& other ) :
         x( other.x ), y( other.y ) {}
@@ -50,7 +50,7 @@ struct Float2 {
     }
 
     float& operator[] ( size_t index ) {
-        return (&x)[index];        
+        return (&x)[index];
     }
 
     const float& operator[] ( size_t index ) const {

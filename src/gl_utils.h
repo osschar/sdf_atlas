@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -53,14 +53,14 @@ struct VertexAttrib {
     GLuint stride;
     GLvoid *offset;
 
-    VertexAttrib(GLuint location, 
-                 const char *name,
-                 GLuint size = 4,
-                 VertexAttribType type = vatypes::gl_float, 
-                 bool normalize = false,
-                 GLvoid *offset = nullptr) :
-        location(location), name(name), size(size), type(type),
-        normalize(normalize), offset(offset) {} 
+    VertexAttrib(GLuint ilocation,
+                 const char *iname,
+                 GLuint isize = 4,
+                 VertexAttribType itype = vatypes::gl_float,
+                 bool inormalize = false,
+                 GLvoid *ioffset = nullptr) :
+        location(ilocation), name(iname), size(isize), type(itype),
+        normalize(inormalize), offset(ioffset) {}
 };
 
 struct Uniform {
@@ -68,9 +68,9 @@ struct Uniform {
     GLuint program_id;
     GLint location;
 
-    Uniform(const char *name) : name((char*)name), program_id(0), location(-1) {}
-    Uniform( GLuint program_id, GLint location ) :
-        name(nullptr), program_id( program_id ), location( location )
+    Uniform(const char *iname) : name((char*)iname), program_id(0), location(-1) {}
+    Uniform( GLuint iprogram_id, GLint ilocation ) :
+        name(nullptr), program_id( iprogram_id ), location( ilocation )
     {}
 };
 
@@ -105,7 +105,7 @@ void initVertexAttribs( VertexAttrib *attribs, size_t attrib_count, GLvoid *offs
 void bindAttribs( VertexAttrib *attribs, size_t attrib_count, size_t offset = 0 );
 
 struct Uniform1i : Uniform {
-    Uniform1i(const char* name) : Uniform(name) {};
+    Uniform1i(const char* iname) : Uniform(iname) {};
 
     void set(int v0) const {
         glUniform1i(location, v0);
@@ -118,7 +118,7 @@ struct Uniform1f : Uniform {
     void set(float v0) const {
         glUniform1f(location, v0);
     }
-    
+
     void setv(const float *v, GLsizei count = 1) const {
         glUniform1fv(location, count, v);
     }
@@ -126,11 +126,11 @@ struct Uniform1f : Uniform {
 
 struct Uniform2f : Uniform {
     using Uniform::Uniform;
-    
+
     void set(float v0, float v1) const {
         glUniform2f(location, v0, v1);
     }
-    
+
     void setv(const float *v, GLsizei count = 1) const {
         glUniform2fv(location, count, v);
     }
@@ -138,7 +138,7 @@ struct Uniform2f : Uniform {
 
 struct Uniform3f : Uniform {
     using Uniform::Uniform;
-    
+
     void set(float v0, float v1, float v2) const {
         glUniform3f(location, v0, v1, v2);
     }
@@ -150,7 +150,7 @@ struct Uniform3f : Uniform {
 
 struct Uniform4f : Uniform {
     using Uniform::Uniform;
-    
+
     void set(float v0, float v1, float v2, float v3) const {
         glUniform4f(location, v0, v1, v2, v3);
     }
@@ -162,7 +162,7 @@ struct Uniform4f : Uniform {
 
 struct UniformMatrix2 : Uniform {
     using Uniform::Uniform;
-    
+
     void setv(const float *v, GLsizei count = 1, GLboolean transpose = false) const {
         glUniformMatrix2fv(location, count, transpose, v);
     }
@@ -170,7 +170,7 @@ struct UniformMatrix2 : Uniform {
 
 struct UniformMatrix3 : Uniform {
     using Uniform::Uniform;
-    
+
     void setv(const float *v, GLsizei count = 1, GLboolean transpose = false) const {
         glUniformMatrix3fv(location, count, transpose, v);
     }
@@ -178,7 +178,7 @@ struct UniformMatrix3 : Uniform {
 
 struct UniformMatrix4 : Uniform {
     using Uniform::Uniform;
-    
+
     void setv(const float *v, GLsizei count = 1, GLboolean transpose = false) const {
         glUniformMatrix4fv(location, count, transpose, v);
     }
@@ -186,7 +186,7 @@ struct UniformMatrix4 : Uniform {
 
 struct UniformMatrix2x3 : Uniform {
     using Uniform::Uniform;
-    
+
     void setv(const float *v, GLsizei count = 1, GLboolean transpose = false) const {
         glUniformMatrix2x3fv(location, count, transpose, v);
     }
@@ -194,7 +194,7 @@ struct UniformMatrix2x3 : Uniform {
 
 struct UniformMatrix3x2 : Uniform {
     using Uniform::Uniform;
-    
+
     void setv(const float *v, GLsizei count = 1, GLboolean transpose = false) const {
         glUniformMatrix3x2fv(location, count, transpose, v);
     }
@@ -202,7 +202,7 @@ struct UniformMatrix3x2 : Uniform {
 
 struct UniformMatrix2x4 : Uniform {
     using Uniform::Uniform;
-    
+
     void setv(const float *v, GLsizei count = 1, GLboolean transpose = false) const {
         glUniformMatrix2x4fv(location, count, transpose, v);
     }
@@ -210,7 +210,7 @@ struct UniformMatrix2x4 : Uniform {
 
 struct UniformMatrix4x2 : Uniform {
     using Uniform::Uniform;
-    
+
     void setv(const float *v, GLsizei count = 1, GLboolean transpose = false) const {
         glUniformMatrix4x2fv(location, count, transpose, v);
     }
@@ -218,7 +218,7 @@ struct UniformMatrix4x2 : Uniform {
 
 struct UniformMatrix3x4 : Uniform {
     using Uniform::Uniform;
-    
+
     void setv(const float *v, GLsizei count = 1, GLboolean transpose = false) const {
         glUniformMatrix3x4fv(location, count, transpose, v);
     }

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,7 +29,7 @@
 #include "mat2d.h"
 
 
-struct Glyph {    
+struct Glyph {
     enum CharType {
         Lower = 1, Upper = 2, Punct = 4, Space = 8, Other = 0
     } char_type = Other;
@@ -70,11 +70,11 @@ struct Font {
     // Kerning map: ( left_codepoint << 16 & right_codepoint ) -> kerning advance distance
     std::unordered_map<uint32_t, float>  kern_map;
 
-    // Glyph map: codepoint -> glyph index 
+    // Glyph map: codepoint -> glyph index
     std::unordered_map<uint32_t, int>    glyph_map;
 
     // Codepoint map: glyph index -> codepoint
-    std::unordered_map<int, std::vector<uint32_t>> cp_map;    
+    std::unordered_map<int, std::vector<uint32_t>> cp_map;
 
     // Glyph array
     std::vector<Glyph>                   glyphs;

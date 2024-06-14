@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,7 +33,6 @@ GLuint createVertexBuffer( GLenum usage, size_t size, const void *data ) {
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
     return id;
 }
-
 
 GLuint compileShader(const char *name, const char *source, ShaderType type) {
 	GLuint sid = glCreateShader(type);
@@ -114,24 +113,23 @@ GLuint createProgram(const char* name, const char* vertex_shader, const char* fr
     glAttachShader(id, fs_id);
 
     for (size_t i = 0; i < attrib_count; i++ ) {
-        glBindAttribLocation(id, attribs[i].location, attribs[i].name);    
+        glBindAttribLocation(id, attribs[i].location, attribs[i].name);
     }
 
     if ( before_link ) before_link( id );
 
     bool linked = linkProgram(id);
     if (!linked) return 0;
-    
+
     return id;
 }
-
 
 void deleteProgram( GLuint program ) {
     GLuint shaders[16];
     GLsizei count = 0;
     glGetAttachedShaders( program, 16, &count, shaders );
     glDeleteProgram( program );
-    
+
     for ( GLsizei i = 0; i < count; ++i ) {
         glDeleteShader( shaders[i] );
     }
@@ -155,7 +153,7 @@ GLuint vertexAttribsStride(VertexAttrib *attribs, size_t attrib_count) {
     return size;
 }
 
-    
+
 void initVertexAttribs(VertexAttrib *attribs, size_t attrib_count, GLvoid *offset, GLuint stride) {
     GLuint new_stride = stride ? stride : vertexAttribsStride(attribs, attrib_count);
     char *voffset = (char*)offset;

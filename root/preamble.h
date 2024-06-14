@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,39 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#pragma once
 
-#include "glyph_painter.h"
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cwctype>
+#include <fstream>
+#include <functional>
+#include <GL/glew.h>
+#include <GL/gl.h>
+#include <iostream>
+#include <sstream>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
-struct GlyphRect {
-    uint32_t codepoint = 0;
-    int      glyph_idx = 0;
-    float x0 = 0.0f, y0 = 0.0f, x1 = 0.0f, y1 = 0.0f;
-};
-
-struct SdfAtlas {
-    Font *font        = nullptr;
-    float tex_width   = 2048.0f;
-    float row_height  = 96.0f;
-    float sdf_size    = 16.0f;
-    int   glyph_count = 0;
-
-    float posx = 0;
-    float posy = 0;
-    int   max_height = 0;
-
-    std::vector<GlyphRect> glyph_rects;
-
-    void init( Font *font, float tex_width, float row_height, float sdf_size );
-
-    void allocate_codepoint( uint32_t codepoint );
-
-    void allocate_all_glyphs();
-
-    void allocate_unicode_range( uint32_t start, uint32_t end ); // end is inclusive
-
-    void draw_glyphs( GlyphPainter& gp ) const;
-
-    std::string json( float tex_height, bool flip_texcoord_y = true ) const;
-};
+namespace root_sdf_fonts
+{

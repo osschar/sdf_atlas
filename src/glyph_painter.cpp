@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -48,7 +48,7 @@ void FillPainter::move_to( F2 p0 ) {
 
 void FillPainter::line_to( F2 p1 ) {
     fill_triangle( fan_pos, prev_pos, p1, &vertices );
-    
+
     prev_pos = p1;
 }
 
@@ -56,7 +56,7 @@ void FillPainter::qbez_to( F2 p1, F2 p2 ) {
     SdfVertex v0, v1, v2, v3, v4, v5;
 
     fill_triangle( fan_pos, prev_pos, p2, &vertices );
-    
+
     v0 = { prev_pos,  F2( -1.0f,  1.0f ), F2( 0.0f ), 0.0f, 0.0f };
     v1 = { p1,        F2(  0.0f, -1.0f ), F2( 0.0f ), 0.0f, 0.0f };
     v2 = { p2,        F2(  1.0f,  1.0f ), F2( 0.0f ), 0.0f, 0.0f };
@@ -64,7 +64,7 @@ void FillPainter::qbez_to( F2 p1, F2 p2 ) {
     vertices.push_back( v0 );
     vertices.push_back( v1 );
     vertices.push_back( v2 );
-    
+
     prev_pos = p2;
 }
 
@@ -120,13 +120,13 @@ void LinePainter::line_to( F2 p1, float line_width ) {
 
     Parabola par = Parabola::from_line( prev_pos, p1 );
     line_rect( par, vmin, vmax, line_width, &vertices );
-    
+
     prev_pos = p1;
 }
 
 void LinePainter::qbez_to( F2 p1, F2 p2, float line_width ) {
     F2 p0 = prev_pos;
-    
+
     F2 mid01 = F2( 0.5 ) * ( p0 + p1 );
     F2 mid12 = F2( 0.5 ) * ( p1 + p2 );
 
@@ -145,10 +145,10 @@ void LinePainter::qbez_to( F2 p1, F2 p2, float line_width ) {
     F2 v12 = p2 - p1;
     F2 np10 = normalize( v10 );
     F2 np12 = normalize( v12 );
-    
+
     QbezType qtype = qbez_type( np10, np12 );
     Parabola par;
-    
+
     switch ( qtype ) {
     case QbezType::Parabola:
         par = Parabola::from_qbez( p0, p1, p2 );
@@ -167,7 +167,7 @@ void LinePainter::qbez_to( F2 p1, F2 p2, float line_width ) {
         Parabola par0 = Parabola::from_line( p0, qtop );
         line_rect( par0, vmin, vmax, line_width, &vertices );
         Parabola par1 = Parabola::from_line( qtop, p1 );
-        line_rect( par1, vmin, vmax, line_width, &vertices ); 
+        line_rect( par1, vmin, vmax, line_width, &vertices );
         break;
     }
     }
@@ -204,7 +204,7 @@ void GlyphPainter::draw_glyph( const Font *font, int glyph_index, F2 pos, float 
             break;
         case GlyphCommand::BezTo:
             p0 = gc.p0 * scale + pos;
-            p1 = gc.p1 * scale + pos;            
+            p1 = gc.p1 * scale + pos;
             fp.qbez_to( p0, p1 );
             lp.qbez_to( p0, p1, sdf_size );
             break;

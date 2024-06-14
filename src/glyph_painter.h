@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -48,7 +48,7 @@ struct FillPainter {
 struct LinePainter {
     std::vector<SdfVertex> vertices;
 
-    F2 start_pos = F2( 0.0f );    
+    F2 start_pos = F2( 0.0f );
     F2 prev_pos;
 
     void move_to( F2 p0 );
@@ -62,11 +62,11 @@ struct LinePainter {
 
 
 struct GlyphPainter {
-    
+
     FillPainter fp;
 
     LinePainter lp;
-    
+
     void draw_glyph( const Font *font, int glyph_index, F2 pos, float scale, float sdf_size );
 
     void clear() {

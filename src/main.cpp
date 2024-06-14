@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -52,7 +52,6 @@ int          border_size = 16;
 
 std::string  filename;
 std::string  res_filename;
-F2           tex_size = F2( 1024, 1024 );
 
 
 struct UnicodeRange {
@@ -134,7 +133,7 @@ void read_border_size( ArgsParser *ap ) {
     border_size = strtol( ap->word().c_str(), nullptr, 0 );
     if ( errno != 0 || border_size <= 0 ) {
         std::cerr << "Error reading border size." << std::endl;
-        exit( 1 );        
+        exit( 1 );
     }
 }
 
@@ -169,7 +168,7 @@ void read_unicode_ranges( ArgsParser *ap ) {
             pos = new_pos;
             lim = *pos++;
         }
-        
+
         if ( lim == ',' ) {
             unicode_ranges.push_back( UnicodeRange { (uint32_t) range_start, (uint32_t) range_end } );
             continue;
@@ -183,29 +182,17 @@ void read_unicode_ranges( ArgsParser *ap ) {
     }
 };
 
-void render() {
-    glClearColor( 0.0, 0.0, 0.0, 0.0 );
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
-
-    F2 tex_size = F2( width, height );
-
-    glViewport( 0, 0, width, height );
-    sdf_gl.render_sdf( tex_size, gp.fp.vertices, gp.lp.vertices );
-}
-
-
-
-int main( int argc, char* argv[] ) {
+int main( int argc, const char* argv[] ) {
     if ( argc == 1 ) {
         std::cout << help;
         exit( 0 );
     }
-    
+
     if ( !glfwInit() ) {
         std::cerr << "GLFW initailization error" << std::endl;
         exit( 1 );
     }
-                           
+
     glfwWindowHint( GLFW_VISIBLE, GL_FALSE );
     GLFWwindow *window = glfwCreateWindow( 1, 1, "sdf_atlas", nullptr, nullptr );
     if ( !window ) {
@@ -227,7 +214,7 @@ int main( int argc, char* argv[] ) {
 
     glGetIntegerv( GL_MAX_RENDERBUFFER_SIZE, &max_tex_size );
 
-    args.commands["-h"]  = show_help;    
+    args.commands["-h"]  = show_help;
     args.commands["-f"]  = read_filename;
     args.commands["-o"]  = read_res_filename;
     args.commands["-tw"] = read_tex_width;
@@ -268,7 +255,7 @@ int main( int argc, char* argv[] ) {
             sdf_atlas.allocate_unicode_range( ur.start, ur.end );
         }
     }
-    
+
     sdf_atlas.draw_glyphs( gp );
 
     std::cout << "Allocated " << sdf_atlas.glyph_count << " glyphs" << std::endl;
@@ -281,8 +268,8 @@ int main( int argc, char* argv[] ) {
     uint8_t* picbuf = (uint8_t*) malloc( width * height );
 
     // GL initialization
-    
-    sdf_gl.init();    
+
+    sdf_gl.init();
 
     GLuint rbcolor;
     glGenRenderbuffers( 1, &rbcolor );
@@ -353,8 +340,8 @@ int main( int argc, char* argv[] ) {
     }
     json_file << json;
     json_file.close();
-    
+
     glfwTerminate();
-    
+
     return 0;
 }

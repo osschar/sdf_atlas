@@ -27,14 +27,14 @@
 #include <iostream>
 #include <sstream>
 
-void SdfAtlas::init( Font *font, float tex_width, float row_height, float sdf_size ) {
-    this->font = font;
+void SdfAtlas::init( Font *i_font, float i_tex_width, float i_row_height, float i_sdf_size ) {
+    font = i_font;
 
     glyph_rects.clear();
 
-    this->tex_width  = tex_width;
-    this->row_height = row_height;
-    this->sdf_size   = sdf_size;
+    tex_width  = i_tex_width;
+    row_height = i_row_height;
+    sdf_size   = i_sdf_size;
     glyph_count = 0;
     posx = 0.0f;
     posy = 0.0f;

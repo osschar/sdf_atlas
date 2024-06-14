@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -50,12 +50,12 @@ void SdfGl::init() {
 
 void SdfGl::render_sdf( F2 tex_size, const std::vector<SdfVertex> &fill_vertices, const std::vector<SdfVertex> &line_vertices ) {
 
-    // full screen quad vertices    
+    // full screen quad vertices
     SdfVertex fs_quad[6] = {
         { F2( -1.0, -1.0 ), F2( 0.0f, 1.0f ), F2( 0.0f ), 0.0f, 0.0f },
         { F2(  1.0, -1.0 ), F2( 0.0f, 1.0f ), F2( 0.0f ), 0.0f, 0.0f },
         { F2(  1.0,  1.0 ), F2( 0.0f, 1.0f ), F2( 0.0f ), 0.0f, 0.0f },
-        
+
         { F2( -1.0, -1.0 ), F2( 0.0f, 1.0f ), F2( 0.0f ), 0.0f, 0.0f },
         { F2(  1.0,  1.0 ), F2( 0.0f, 1.0f ), F2( 0.0f ), 0.0f, 0.0f },
         { F2( -1.0,  1.0 ), F2( 0.0f, 1.0f ), F2( 0.0f ), 0.0f, 0.0f }
@@ -77,21 +77,21 @@ void SdfGl::render_sdf( F2 tex_size, const std::vector<SdfVertex> &fill_vertices
         0, 0, 1
     };
 
-    glViewport( 0, 0, tex_size.x, tex_size.y );    
+    glViewport( 0, 0, tex_size.x, tex_size.y );
 
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
 
     // Drawing lines with depth test
 
     if ( line_vertices.size() ) {
-    
+
         bindAttribs( vattribs, vattribs_count, (size_t) line_vertices.data() );
 
         glUseProgram( line_prog );
         uline.transform_matrix.setv( mscreen3 );
         glEnable( GL_DEPTH_TEST );
         glDepthFunc( GL_LEQUAL );
-        glDrawArrays( GL_TRIANGLES, 0, lcount );    
+        glDrawArrays( GL_TRIANGLES, 0, lcount );
         glDisable( GL_DEPTH_TEST );
 
     }
@@ -99,19 +99,19 @@ void SdfGl::render_sdf( F2 tex_size, const std::vector<SdfVertex> &fill_vertices
     // Drawing fills
 
     if ( fill_vertices.size() ) {
-    
+
         bindAttribs( vattribs, vattribs_count, (size_t) fill_vertices.data() );
-    
+
         glUseProgram( fill_prog );
         ufill.transform_matrix.setv( mscreen3 );
-    
+
         glEnable( GL_STENCIL_TEST );
         glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
 
         glStencilFunc( GL_ALWAYS, 0, 0xff );
         glStencilOpSeparate( GL_FRONT, GL_KEEP, GL_INCR_WRAP, GL_INCR_WRAP );
         glStencilOpSeparate( GL_BACK, GL_KEEP, GL_DECR_WRAP, GL_DECR_WRAP );
-        glDrawArrays( GL_TRIANGLES, 0, fcount );        
+        glDrawArrays( GL_TRIANGLES, 0, fcount );
 
         // Drawing full screen quad, inverting colors where stencil == 1
 
@@ -130,6 +130,6 @@ void SdfGl::render_sdf( F2 tex_size, const std::vector<SdfVertex> &fill_vertices
 
     glDisable( GL_BLEND );
     glDisable( GL_STENCIL_TEST );
-    
+
     glUseProgram( 0 );
 }

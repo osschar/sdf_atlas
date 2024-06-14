@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,15 +30,15 @@ std::string ArgsParser::word() {
     return res;
 }
 
-bool ArgsParser::run( int argc, char** argv ) {
-    this->argc = argc;
-    this->argv = argv;
+bool ArgsParser::run( int iargc, const char** iargv ) {
+    argc = iargc;
+    argv = iargv;
     arg  = argv + 1;
 
     while( arg != argv + argc ) {
         std::string op = word();
         auto got = commands.find( op );
-        
+
         if ( got == commands.end() ) {
             std::cerr << "Unknown parameter: " << op << std::endl;
             return false;

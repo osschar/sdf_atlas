@@ -580,9 +580,9 @@ static bool fill_kern( Font& font, const uint8_t *ttf, float scale ) {
     for ( uint32_t ipair = 0; ipair < num_pairs; ++ipair ) {
         uint32_t left  = ttf_u16( pos );
         uint32_t right = ttf_u16( pos + 2 );
-        int32_t  kern  = ttf_i16( pos + 4 );
+        int32_t  hkern  = ttf_i16( pos + 4 );
         uint32_t pair = ( left << 16 ) | right;
-        font.kern_map.insert( { pair, kern * scale } );
+        font.kern_map.insert( { pair, hkern * scale } );
         pos += 6;
     }
 

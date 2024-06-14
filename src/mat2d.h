@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,7 +35,7 @@ struct Mat2d {
 
 
     Mat2d( float m00, float m01,
-          float m10, float m11, 
+          float m10, float m11,
           float m20, float m21  ) {
         mat[0][0] = m00; mat[0][1] = m01;
         mat[1][0] = m10; mat[1][1] = m11;
@@ -50,12 +50,12 @@ struct Mat2d {
 
     Float2& operator[]( size_t index ) {
         return mat[index];
-    }    
+    }
 
     const Float2& operator[]( size_t index ) const {
         return mat[index];
     }
-    
+
     float* ptr() {
         return mat[0].ptr();
     }
@@ -101,7 +101,7 @@ inline Mat2d invert( const Mat2d& m ) {
 
     res[2][0] = invdet * ( m[1][0] * m[2][1] - m[2][0] * m[1][1] );
     res[2][1] = invdet * ( m[0][1] * m[2][0] - m[0][0] * m[2][1] );
-    
+
     return res;
 }
 
